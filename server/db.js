@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { Sequelize } from "sequelize"
 
 const sequelize = new Sequelize("cityplay", "fran", "nyc911", {
