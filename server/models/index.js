@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const basename = path.basename(__filename)
-const env = process.env.NODE_ENV || "dev"
+const env = process.env.NODE_ENV || "development"
 const dbConfig = config[env]
 const db = {}
 
@@ -26,8 +26,10 @@ fs.readdirSync(__dirname)
 			file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js" && file.indexOf(".test.js") === -1
 	)
 	.forEach((file) => {
-		const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes)
-		db[model.name] = model
+		import(path.join(__dirname, file)).then((module) => {
+			const model = module.default(sequelize, Sequelize.DataTypes)
+			db[model.name] = model
+		})
 	})
 
 Object.keys(db).forEach((modelName) => {

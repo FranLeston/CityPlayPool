@@ -1,8 +1,15 @@
 import { Sequelize } from "sequelize"
+import dotenv from "dotenv"
+import config from "./config/config.js"
 
-const sequelize = new Sequelize("cityplay", "fran", "nyc911", {
-	host: "127.0.0.1",
-	dialect: "mysql"
+dotenv.config()
+
+const env = process.env.NODE_ENV || "development"
+const dbConfig = config[env]
+
+const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
+	host: dbConfig.host,
+	dialect: dbConfig.dialect
 })
 
 sequelize
